@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dropify.vercel.app/sitemap.xml
-Sitemap: https://dropify.vercel.app/sitemap.txt
+Sitemap: https://dropifyin.vercel.app/sitemap.xml
+Sitemap: https://dropifyin.vercel.app/sitemap.txt
