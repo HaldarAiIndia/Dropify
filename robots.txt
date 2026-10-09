@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dropify.vercel.app/sitemap.xml
+Sitemap: https://dropify.vercel.app/sitemap.txt
