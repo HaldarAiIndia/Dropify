@@ -1,6 +1,6 @@
 {
-  "name": "Dropify",
-  "short_name": "Dropify",
+  "name": "Dropifyin by SecureDrop",
+  "short_name": "Dropifyin",
   "description": "Fast, secure, and privacy-focused file sharing platform.",
   "start_url": "/",
   "scope": "/",
