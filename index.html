@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dropify by SecureDrop</title>
+
+  <!-- SEO & Search Engine Tags -->
+  <meta name="description" content="Fast, secure, and privacy-focused temporary file sharing platform. Share files anonymously with a 4-digit code.">
+  <meta name="keywords" content="Dropify, SecureDrop, file transfer, send files, quick transfer, pwa file share">
+  <meta name="author" content="Dropify by SecureDrop">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://dropify.vercel.app/">
+
+  <!-- Google Search Console Verification -->
+  <meta name="google-site-verification" content="googlea5ea00990f330604">
+
+  <!-- Open Graph / Facebook / WhatsApp Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Dropify by SecureDrop">
+  <meta property="og:title" content="Dropify by SecureDrop — Fast & Secure File Sharing">
+  <meta property="og:description" content="Share large files anonymously with end-to-end chunking and temporary 4-digit codes.">
+  <meta property="og:url" content="https://dropify.vercel.app/">
+  <meta property="og:image" content="https://dropify.vercel.app/favicon.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Dropify by SecureDrop — Fast & Secure File Sharing">
+  <meta name="twitter:description" content="Share large files anonymously with temporary 4-digit codes.">
+  <meta name="twitter:image" content="https://dropify.vercel.app/favicon.png">
+
+  <!-- Favicon & PWA Icons (Uses strictly /favicon.png) -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#17181a">
+
+  <!-- Apple iOS Web App Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Dropify">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- Google Rich Snippet (Schema.org JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Dropify by SecureDrop",
+    "url": "https://dropify.vercel.app/",
+    "description": "Fast, secure, and privacy-focused file sharing platform.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "screenshot": "https://dropify.vercel.app/favicon.png",
+    "offers": {
+      "@type": "Offer",
+      "price": "0"
+    }
+  }
+  </script>
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
+
+  <style>
+    :root {
+        --bg-primary: #17181a;
+        --bg-secondary: #202225;
+        --bg-tertiary: #2c2f33;
+        --bg-code: #101214;
+        --bg-hover: #35383c;
+        --text-primary: #f0f2f5;
+        --text-secondary: #a8b3cf;
+        --text-active: #82aaff;
+        --border-color: #3a3d42;
+        --error-color: #ff8a80;
+        --success-color: #69db7c;
+        --font-family: 'Inter', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; overflow: hidden; background-color: var(--bg-primary); color: var(--text-primary); font-family: var(--font-family); font-size: 16px; }
+    button, a { background: none; border: none; cursor: pointer; color: inherit; text-decoration: none; font-family: inherit; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; font-size: 20px; color: var(--text-secondary); transition: color 0.2s; user-select: none; }
+    *:focus-visible { outline: 2px solid var(--text-active); outline-offset: 2px; border-radius: 4px; }
+
+    .main-wrapper { width: 100%; height: 100%; display: flex; flex-direction: column; }
+    
+    /* Header with Brand Icon & Install App Button */
+    .main-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background-color: rgba(23, 24, 26, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); flex-shrink: 0; z-index: 10; }
+    .brand-group { display: flex; align-items: center; gap: 10px; }
+    .brand-logo { width: 30px; height: 30px; border-radius: 6px; object-fit: cover; }
+    .header-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .btn-install { display: none; background: rgba(130,170,255,0.12); color: var(--text-active); border: 1px solid rgba(130,170,255,0.3); padding: 6px 14px; font-size: 0.85rem; border-radius: 6px; font-weight: 600; }
+    .btn-install:hover { background: rgba(130,170,255,0.22); }
+
+    .content-area { flex-grow: 1; overflow-y: auto; position: relative; }
+    .content-wrapper { max-width: 820px; width: 100%; margin: 0 auto; padding: 32px 16px 20px 16px; min-height: calc(100% - 60px); display: flex; flex-direction: column; }
+
+    .status-message { margin-top: 16px; padding: 12px 14px; background-color: var(--bg-tertiary); border-left: 3px solid var(--text-active); color: var(--text-secondary); border-radius: 6px; display: none; word-wrap: break-word; font-size: 0.95rem; }
+    .status-message.visible { display: block; }
+    .status-message.error { border-left-color: var(--error-color); color: var(--error-color); }
+    .status-message.success { border-left-color: var(--success-color); color: var(--success-color); }
+
+    .card { background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .card h2 { font-size: 1.35rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 600; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px; }
+    .form-group .input-with-button { display: flex; gap: 10px; align-items: center; }
+    .form-group input[type="text"], .form-group input[type="number"] { width: 100%; background-color: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px; font-size: 1rem; color: var(--text-primary); outline: none; transition: border-color 0.2s; flex-grow: 1; }
+    .form-group input:focus { border-color: var(--text-active); }
+    .form-group input:read-only { background-color: var(--bg-code); cursor: text; letter-spacing: 1px; font-weight: 600; }
+
+    /* Drop Zone */
+    .drop-zone { border: 2px dashed var(--border-color); border-radius: 10px; padding: 36px 16px; text-align: center; cursor: pointer; transition: border-color 0.2s, background-color 0.2s; background-color: var(--bg-tertiary); position: relative; }
+    .drop-zone:hover, .drop-zone.drag-over { border-color: var(--text-active); background-color: rgba(130,170,255,0.05); }
+    .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .drop-zone .dz-icon { font-size: 44px !important; color: var(--text-secondary); display: block; margin-bottom: 10px; }
+    .drop-zone .dz-label { font-size: 0.95rem; color: var(--text-secondary); }
+    .drop-zone .dz-label span { color: var(--text-active); font-weight: 600; }
+    .drop-zone .dz-file-name { margin-top: 12px; font-size: 0.88rem; color: var(--text-primary); font-family: 'Roboto Mono', monospace; background: var(--bg-code); padding: 8px 12px; border-radius: 6px; display: none; word-break: break-all; border: 1px solid var(--border-color); }
+    .drop-zone .dz-file-name.visible { display: block; }
+
+    /* Progress Bar */
+    .progress-wrap { margin-top: 18px; display: none; }
+    .progress-wrap.visible { display: block; }
+    .progress-label { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; display: flex; justify-content: space-between; }
+    .progress-bar-track { height: 8px; background-color: var(--bg-tertiary); border-radius: 999px; overflow: hidden; border: 1px solid var(--border-color); }
+    .progress-bar-fill { height: 100%; background-color: var(--text-active); border-radius: 999px; width: 0%; transition: width 0.3s ease; }
+
+    .actions { display: flex; justify-content: center; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+    .btn { padding: 11px 22px; font-weight: 600; border-radius: 8px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; font-size: 0.95rem; }
+    .btn .material-symbols-outlined { font-size: 19px; }
+    .btn-primary { background-color: var(--text-active); color: var(--bg-primary); }
+    .btn-primary:hover:not(:disabled) { opacity: 0.9; }
+    .btn-secondary { background: none; border: 1px solid var(--border-color); color: var(--text-primary); }
+    .btn-secondary:hover:not(:disabled) { background-color: var(--bg-hover); border-color: var(--bg-hover); }
+    .btn-success { background-color: var(--success-color); color: var(--bg-primary); }
+    .btn-success:hover:not(:disabled) { opacity: 0.9; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .divider { display: flex; align-items: center; text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin: 36px 0; font-weight: 600; letter-spacing: 0.05em; }
+    .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); }
+    .divider:not(:empty)::before { margin-right: 1em; }
+    .divider:not(:empty)::after { margin-left: 1em; }
+
+    /* File info box (receiver) */
+    .file-info-box { display: none; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-top: 16px; gap: 14px; align-items: center; }
+    .file-info-box.visible { display: flex; }
+    .file-info-box .fi-icon { font-size: 34px !important; color: var(--text-active); flex-shrink: 0; }
+    .file-info-box .fi-details { flex-grow: 1; min-width: 0; }
+    .file-info-box .fi-name { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-info-box .fi-size { font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px; }
+
+    /* Footer */
+    .main-footer { margin-top: auto; padding-top: 30px; text-align: center; font-size: 0.85rem; color: var(--text-secondary); border-top: 1px solid rgba(255,255,255,0.05); }
+    .main-footer p { margin-bottom: 6px; }
+    .main-footer .security-badge { display: inline-flex; align-items: center; gap: 6px; color: var(--success-color); background: rgba(105,219,124,0.08); padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 500; margin-bottom: 12px; }
+    .main-footer .security-badge .material-symbols-outlined { font-size: 15px; color: var(--success-color); }
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+    <header class="main-header">
+      <div class="brand-group">
+        <img src="/favicon.png" alt="Dropify Logo" class="brand-logo">
+        <h1 class="header-title">Dropify by SecureDrop</h1>
+      </div>
+      <div class="header-actions">
+        <!-- Direct PWA Install Button -->
+        <button id="pwaInstallBtn" class="btn btn-install">
+          <span class="material-symbols-outlined">install_mobile</span>Install App
+        </button>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <div class="content-wrapper">
+
+        <!-- SENDER SECTION -->
+        <div class="card">
+          <h2><span class="material-symbols-outlined">upload_file</span>Sender</h2>
+
+          <div class="form-group">
+            <label>Select or Drop File</label>
+            <div class="drop-zone" id="dropZone">
+              <input type="file" id="fileInput">
+              <span class="material-symbols-outlined dz-icon">cloud_upload</span>
+              <p class="dz-label">Drop file here or <span>browse</span></p>
+              <p class="dz-file-name" id="selectedFileName"></p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="generatedTransferId">Generated 4-Digit Transfer ID</label>
+            <div class="input-with-button">
+              <input type="text" id="generatedTransferId" placeholder="Click 'Send File' to generate an ID..." readonly>
+              <button id="shareBtn" class="btn btn-secondary" disabled>
+                <span class="material-symbols-outlined">share</span>Share
+              </button>
+            </div>
+          </div>
+
+          <div class="progress-wrap" id="senderProgress">
+            <div class="progress-label">
+              <span id="senderProgressLabel">Uploading...</span>
+              <span id="senderProgressPct">0%</span>
+            </div>
+            <div class="progress-bar-track"><div class="progress-bar-fill" id="senderProgressBar"></div></div>
+          </div>
+
+          <div class="actions">
+            <button id="sendBtn" class="btn btn-primary" disabled>
+              <span class="material-symbols-outlined">send</span>Send File
+            </button>
+            <button id="senderResetBtn" class="btn btn-secondary" style="display:none;">
+              <span class="material-symbols-outlined">restart_alt</span>Send Another File
+            </button>
+          </div>
+          <div id="senderStatus" class="status-message"></div>
+        </div>
+
+        <div class="divider">OR</div>
+
+        <!-- RECEIVER SECTION -->
+        <div class="card">
+          <h2><span class="material-symbols-outlined">download</span>Receiver</h2>
+
+          <div class="form-group">
+            <label for="transferIdInput">Enter 4-Digit Transfer ID</label>
+            <div class="input-with-button">
+              <input id="transferIdInput" placeholder="Paste or type Transfer ID here..." type="number" pattern="\d*">
+              <button id="pasteBtn" class="btn btn-secondary">
+                <span class="material-symbols-outlined">content_paste</span>Paste
+              </button>
+            </div>
+          </div>
+
+          <div class="file-info-box" id="fileInfoBox">
+            <span class="material-symbols-outlined fi-icon">draft</span>
+            <div class="fi-details">
+              <div class="fi-name" id="incomingFileName">—</div>
+              <div class="fi-size" id="incomingFileSize">—</div>
+            </div>
+          </div>
+
+          <div class="progress-wrap" id="receiverProgress">
+            <div class="progress-label">
+              <span id="receiverProgressLabel">Waiting for file...</span>
+              <span id="receiverProgressPct">0%</span>
+            </div>
+            <div class="progress-bar-track"><div class="progress-bar-fill" id="receiverProgressBar"></div></div>
+          </div>
+
+          <div class="actions">
+            <button id="connectBtn" class="btn btn-primary">
+              <span class="material-symbols-outlined">link</span>Connect to Transfer
+            </button>
+            <button id="downloadBtn" class="btn btn-success" style="display:none;">
+              <span class="material-symbols-outlined">download</span>Download File
+            </button>
+            <button id="receiverResetBtn" class="btn btn-secondary" style="display:none;">
+              <span class="material-symbols-outlined">refresh</span>New Receive
+            </button>
+          </div>
+          <div id="receiverStatus" class="status-message"></div>
+        </div>
+
+        <!-- PROFESSIONAL FOOTER -->
+        <footer class="main-footer">
+          <div class="security-badge">
+            <span class="material-symbols-outlined">verified_user</span> No permanent storage • Auto-deleted
+          </div>
+          <p>© 2026 Dropify by SecureDrop. Fast, secure, and encrypted peer file streaming.</p>
+        </footer>
+
+      </div>
+    </main>
+  </div>
+
+<script>
+// ================================================================================
+// SERVICE WORKER REGISTRATION & PWA INSTALL PROMPT
+// ================================================================================
+let deferredPrompt;
+const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('Service Worker Registered:', reg.scope))
+      .catch(err => console.error('Service Worker Error:', err));
+  });
+}
+
+// Show native WebAPK install button when browser supports it
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  pwaInstallBtn.style.display = 'inline-flex';
+});
+
+pwaInstallBtn.addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      pwaInstallBtn.style.display = 'none';
+    }
+    deferredPrompt = null;
+  }
+});
+
+// ================================================================================
+// CONFIG (BACKEND CONNECTED TO PHP SERVER)
+// ================================================================================
+const API_URL    = 'https://securedrop.infy.click/transfer.php';
+const CHUNK_SIZE = 256 * 1024; // 256 KB per chunk
+
+// ================================================================================
+// DOM ELEMENTS
+// ================================================================================
+const dropZone              = document.getElementById('dropZone');
+const fileInput             = document.getElementById('fileInput');
+const selectedFileName      = document.getElementById('selectedFileName');
+const generatedTransferId   = document.getElementById('generatedTransferId');
+const shareBtn              = document.getElementById('shareBtn');
+const sendBtn               = document.getElementById('sendBtn');
+const senderResetBtn        = document.getElementById('senderResetBtn');
+const senderStatus          = document.getElementById('senderStatus');
+const senderProgress        = document.getElementById('senderProgress');
+const senderProgressBar     = document.getElementById('senderProgressBar');
+const senderProgressLabel   = document.getElementById('senderProgressLabel');
+const senderProgressPct     = document.getElementById('senderProgressPct');
+
+const transferIdInput       = document.getElementById('transferIdInput');
+const pasteBtn              = document.getElementById('pasteBtn');
+const connectBtn            = document.getElementById('connectBtn');
+const downloadBtn           = document.getElementById('downloadBtn');
+const receiverResetBtn      = document.getElementById('receiverResetBtn');
+const receiverStatus        = document.getElementById('receiverStatus');
+const fileInfoBox           = document.getElementById('fileInfoBox');
+const incomingFileName      = document.getElementById('incomingFileName');
+const incomingFileSize      = document.getElementById('incomingFileSize');
+const receiverProgress      = document.getElementById('receiverProgress');
+const receiverProgressBar   = document.getElementById('receiverProgressBar');
+const receiverProgressLabel = document.getElementById('receiverProgressLabel');
+const receiverProgressPct   = document.getElementById('receiverProgressPct');
+
+let selectedFile      = null;
+let receiverPollTimer = null;
+let activeTransferId  = null;
+
+// ================================================================================
+// UTILITIES
+// ================================================================================
+function showStatus(el, msg, type = '') {
+  el.textContent = msg;
+  el.className = 'status-message visible' + (type ? ' ' + type : '');
+}
+
+function fmtBytes(bytes) {
+  if (bytes < 1024)             return bytes + ' B';
+  if (bytes < 1024 * 1024)      return (bytes / 1024).toFixed(1) + ' KB';
+  if (bytes < 1024 ** 3)        return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+  return (bytes / 1024 ** 3).toFixed(2) + ' GB';
+}
+
+function setProgress(bar, labelEl, pctEl, pct, text) {
+  bar.style.width = pct + '%';
+  pctEl.textContent = Math.round(pct) + '%';
+  if (text) labelEl.textContent = text;
+}
+
+async function api(action, id, body = null, extraParams = '') {
+  const url  = `${API_URL}?action=${action}&id=${id}${extraParams}`;
+  const opts = { method: body ? 'POST' : 'GET', headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res  = await fetch(url, opts);
+  const data = await res.json();
+  if (!data.ok) throw new Error(data.error || 'Server error');
+  return data;
+}
+
+function bufferToBase64(buffer) {
+  let bin = '';
+  const bytes = new Uint8Array(buffer);
+  for (let i = 0; i < bytes.byteLength; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+
+async function generateUniqueId() {
+  for (let i = 0; i < 50; i++) {
+    const id  = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    const res = await api('check_id', id);
+    if (!res.exists) return id;
+  }
+  return null;
+}
+
+// ================================================================================
+// FILE SELECTION
+// ================================================================================
+function handleFileSelected(file) {
+  if (!file) return;
+  selectedFile = file;
+  selectedFileName.textContent = file.name + '  (' + fmtBytes(file.size) + ')';
+  selectedFileName.classList.add('visible');
+  sendBtn.disabled = false;
+  generatedTransferId.value = '';
+  shareBtn.disabled = true;
+  senderProgress.classList.remove('visible');
+  senderStatus.className = 'status-message';
+  senderResetBtn.style.display = 'none';
+}
+
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFileSelected(fileInput.files[0]); });
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  if (e.dataTransfer.files[0]) handleFileSelected(e.dataTransfer.files[0]);
+});
+
+// ================================================================================
+// SENDER — CHUNKED UPLOAD
+// ================================================================================
+async function sendFile() {
+  if (!selectedFile) return;
+  sendBtn.disabled = true;
+  shareBtn.disabled = true;
+  showStatus(senderStatus, 'Generating a unique 4-digit Transfer ID...');
+
+  try {
+    const transferId = await generateUniqueId();
+    if (!transferId) {
+      showStatus(senderStatus, 'Error: Could not generate a unique Transfer ID. Please try again.', 'error');
+      sendBtn.disabled = false;
+      return;
+    }
+
+    const totalChunks = Math.ceil(selectedFile.size / CHUNK_SIZE) || 1;
+
+    await api('create_session', transferId, {
+      filename:    selectedFile.name,
+      filesize:    selectedFile.size,
+      filetype:    selectedFile.type || 'application/octet-stream',
+      totalChunks: totalChunks,
+    });
+
+    generatedTransferId.value = transferId;
+    shareBtn.disabled = false;
+    senderProgress.classList.add('visible');
+    showStatus(senderStatus, 'Uploading "' + selectedFile.name + '" — share the ID with the receiver.');
+
+    for (let i = 0; i < totalChunks; i++) {
+      const start  = i * CHUNK_SIZE;
+      const end    = Math.min(start + CHUNK_SIZE, selectedFile.size);
+      const buffer = await selectedFile.slice(start, end).arrayBuffer();
+      const b64    = bufferToBase64(buffer);
+
+      await api('upload_chunk', transferId, { index: i, chunk: b64 });
+
+      const pct = ((i + 1) / totalChunks) * 100;
+      setProgress(senderProgressBar, senderProgressLabel, senderProgressPct, pct,
+        'Uploading chunk ' + (i + 1) + ' of ' + totalChunks + '...');
+    }
+
+    setProgress(senderProgressBar, senderProgressLabel, senderProgressPct, 100, 'Upload complete!');
+    showStatus(senderStatus, '"' + selectedFile.name + '" uploaded successfully! Transfer ID: ' + transferId, 'success');
+    senderResetBtn.style.display = 'inline-flex';
+
+  } catch (err) {
+    console.error('Send error:', err);
+    showStatus(senderStatus, 'Error: ' + err.message, 'error');
+    sendBtn.disabled = false;
+  }
+}
+
+function resetSender() {
+  selectedFile = null;
+  fileInput.value = '';
+  selectedFileName.textContent = '';
+  selectedFileName.classList.remove('visible');
+  generatedTransferId.value = '';
+  shareBtn.disabled = true;
+  sendBtn.disabled = true;
+  senderProgress.classList.remove('visible');
+  senderStatus.className = 'status-message';
+  senderResetBtn.style.display = 'none';
+}
+
+// ================================================================================
+// RECEIVER — CONNECT, POLL, DOWNLOAD
+// ================================================================================
+async function connectToTransfer() {
+  const raw = transferIdInput.value.trim();
+  const transferId = raw.padStart(4, '0');
+
+  if (!raw || raw.length > 4 || isNaN(raw)) {
+    showStatus(receiverStatus, 'Error: Please enter a valid 4-digit Transfer ID.', 'error');
+    return;
+  }
+
+  connectBtn.disabled = true;
+  downloadBtn.style.display = 'none';
+  receiverResetBtn.style.display = 'none';
+  fileInfoBox.classList.remove('visible');
+  receiverProgress.classList.remove('visible');
+  if (receiverPollTimer) { clearInterval(receiverPollTimer); receiverPollTimer = null; }
+  showStatus(receiverStatus, 'Looking up transfer #' + transferId + '...');
+
+  try {
+    const res     = await api('get_session', transferId);
+    const session = res.session;
+
+    incomingFileName.textContent = session.filename;
+    incomingFileSize.textContent = fmtBytes(session.filesize);
+    fileInfoBox.classList.add('visible');
+    receiverProgress.classList.add('visible');
+    activeTransferId = transferId;
+
+    if (session.complete) {
+      setProgress(receiverProgressBar, receiverProgressLabel, receiverProgressPct, 100, 'File ready!');
+      showStatus(receiverStatus, '"' + session.filename + '" is ready to download.', 'success');
+      downloadBtn.style.display = 'inline-flex';
+      receiverResetBtn.style.display = 'inline-flex';
+      connectBtn.disabled = false;
+      return;
+    }
+
+    showStatus(receiverStatus, 'Waiting for sender to finish uploading "' + session.filename + '"...');
+
+    receiverPollTimer = setInterval(async () => {
+      try {
+        const st  = await api('get_status', activeTransferId);
+        const pct = st.totalChunks > 0 ? (st.receivedChunks / st.totalChunks) * 100 : 0;
+        setProgress(receiverProgressBar, receiverProgressLabel, receiverProgressPct, pct,
+          'Received ' + st.receivedChunks + ' of ' + st.totalChunks + ' chunks...');
+
+        if (st.complete) {
+          clearInterval(receiverPollTimer);
+          setProgress(receiverProgressBar, receiverProgressLabel, receiverProgressPct, 100, 'File ready!');
+          showStatus(receiverStatus, '"' + st.filename + '" is ready to download.', 'success');
+          downloadBtn.style.display = 'inline-flex';
+          receiverResetBtn.style.display = 'inline-flex';
+          connectBtn.disabled = false;
+        }
+      } catch (e) { console.error('Poll error:', e); }
+    }, 2000);
+
+  } catch (err) {
+    console.error('Connect error:', err);
+    showStatus(receiverStatus, 'Error: ' + err.message, 'error');
+    connectBtn.disabled = false;
+  }
+}
+
+function triggerDownload() {
+  if (!activeTransferId) return;
+  window.location.href = API_URL + '?action=download&id=' + activeTransferId;
+}
+
+function resetReceiver() {
+  if (receiverPollTimer) { clearInterval(receiverPollTimer); receiverPollTimer = null; }
+  activeTransferId = null;
+  transferIdInput.value = '';
+  fileInfoBox.classList.remove('visible');
+  receiverProgress.classList.remove('visible');
+  downloadBtn.style.display = 'none';
+  receiverResetBtn.style.display = 'none';
+  receiverStatus.className = 'status-message';
+  connectBtn.disabled = false;
+}
+
+// ================================================================================
+// SHARE / PASTE
+// ================================================================================
+async function shareTransferId() {
+  const tid = generatedTransferId.value;
+  if (!tid) return;
+  const shareData = {
+    title: 'Dropify Transfer ID',
+    text:  'Download my file using this 4-digit Dropify ID: ' + tid,
+    url:   window.location.href,
+  };
+  if (navigator.share) {
+    try { await navigator.share(shareData); showStatus(senderStatus, 'Transfer ID shared successfully!'); }
+    catch (err) { if (err.name !== 'AbortError') console.error('Share failed:', err); }
+  } else {
+    try {
+      await navigator.clipboard.writeText(tid);
+      const orig = shareBtn.innerHTML;
+      shareBtn.innerHTML = '<span class="material-symbols-outlined">check</span>Copied!';
+      showStatus(senderStatus, 'Transfer ID copied to clipboard!');
+      setTimeout(() => { shareBtn.innerHTML = orig; }, 2500);
+    } catch (err) {
+      showStatus(senderStatus, 'Failed to copy. Please copy the ID manually.', 'error');
+    }
+  }
+}
+
+async function pasteTransferId() {
+  try {
+    if (!navigator.clipboard || !navigator.clipboard.readText) throw new Error('Clipboard API not available.');
+    const text = await navigator.clipboard.readText();
+    if (text) { transferIdInput.value = text.trim(); showStatus(receiverStatus, 'Transfer ID pasted from clipboard.'); }
+    else showStatus(receiverStatus, 'Clipboard is empty.', 'error');
+  } catch (err) {
+    showStatus(receiverStatus, 'Failed to paste. You may need to grant clipboard permissions.', 'error');
+  }
+}
+
+// ================================================================================
+// EVENT LISTENERS
+// ================================================================================
+sendBtn.onclick          = sendFile;
+senderResetBtn.onclick   = resetSender;
+shareBtn.onclick         = shareTransferId;
+connectBtn.onclick       = connectToTransfer;
+downloadBtn.onclick      = triggerDownload;
+receiverResetBtn.onclick = resetReceiver;
+pasteBtn.onclick         = pasteTransferId;
+</script>
+</body>
+</html>
